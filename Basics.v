@@ -77,7 +77,6 @@ Eval simpl in (next_weekday (next_weekday saturday)).
 Example test_next_weekday:
   (next_weekday (next_weekday saturday)) = tuesday.
 
-
 (** This declaration does two things: it makes an
     assertion (that the second weekday after [saturday] is [tuesday]),
     and it gives the assertion a name that can be used to refer to it
@@ -100,7 +99,7 @@ Proof. simpl. reflexivity.  Qed.
     languages.  Indeed, this is one of the main uses for which Coq was
     developed.  We won't have space to dig further into this topic,
     but more information can be found in the Coq'Art book by Bertot
-    and CastÃ©ran, as well as the Coq reference manual. *)
+    and Castéran, as well as the Coq reference manual. *)
 
 (* ###################################################################### *)
 (** ** Booleans *)
@@ -817,7 +816,7 @@ Proof.
 Theorem zero_nbeq_plus_1 : forall n : nat,
   beq_nat 0 (n + 1) = false.
 Proof.
-  intros n. destruct n as [| n'].
+  intros n. destruct n.
   reflexivity. 
   reflexivity. Qed.
 (** [] *)
@@ -905,7 +904,17 @@ Proof.
 Theorem andb_true_elim2 : forall b c : bool,
   andb b c = true -> c = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros b c H.
+  destruct c as [| c'].
+  Case "c = true".
+    reflexivity.
+  Case "c = false".
+    destruct b.
+    SCase "b = true".
+      rewrite <- H. reflexivity.
+    SCase "b = false".
+      rewrite <- H. reflexivity. Qed.
+
 (** [] *)
 
 (** There are no hard and fast rules for how proofs should be
@@ -1013,17 +1022,33 @@ Proof.
 Theorem mult_0_r : forall n:nat,
   n * 0 = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n. induction n as [| n'].
+  Case "n = 0".
+    simpl. reflexivity.
+  case "n = S n'".
+    simpl. rewrite -> IHn'. reflexivity. Qed.
 
 Theorem plus_n_Sm : forall n m : nat, 
   S (n + m) = n + (S m).
 Proof. 
-  (* FILL IN HERE *) Admitted.
+  intros n m. induction n as [| n'].
+  Case "n = 0".
+    simpl. reflexivity.
+  Case "n = S n'".
+    induction m as [| m'].
+    SCase "m = 0". simpl. rewrite -> IHn'. reflexivity.
+    SCase "m = S m'".
+      simpl. rewrite -> IHn'. reflexivity. Qed.
 
 Theorem plus_comm : forall n m : nat,
   n + m = m + n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m. induction n as [| n'].
+  Case "n = 0".
+    simpl. rewrite -> plus_0_r. reflexivity.
+  Case "n = S n'".
+    simpl. rewrite -> IHn'. rewrite -> plus_n_Sm. reflexivity. Qed.
+ 
 (** [] *)
 
 Fixpoint double (n:nat) :=
@@ -1035,7 +1060,12 @@ Fixpoint double (n:nat) :=
 (** **** Exercise: 2 stars (double_plus) *)
 Lemma double_plus : forall n, double n = n + n .
 Proof.  
-  (* FILL IN HERE *) Admitted.
+  intro n. induction n as [| n'].
+  Case "n = 0". simpl. reflexivity.
+  Case "n = S n'". 
+    rewrite <- plus_n_Sm. simpl. rewrite -> IHn'. reflexivity. Qed.
+
+
 (** [] *)
 
 (** **** Exercise: 1 star (destruct_induction) *)
