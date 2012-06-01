@@ -1314,18 +1314,12 @@ Theorem plus_swap : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
   intros n m p.
-  assert (H1: n + (m + p) = (n + m) + p).
-    Case "Proof of assertion".
-    rewrite -> plus_assoc. reflexivity.
-  rewrite -> H1.
-  assert (H2: m + (n + p) = m + n + p).
-    Case "Proof of assertion H2".
-    rewrite -> plus_assoc. reflexivity.
-  rewrite -> H2.
-  assert (H3: m + n = n + m).
-    Case "Proof of assertion H3".
+  assert (H1: n + p = p + n).
+    Case "Proof of H1".
     rewrite -> plus_comm. reflexivity.
-  rewrite -> H3. reflexivity. Qed.
+  rewrite -> plus_comm.
+  rewrite <- plus_assoc.
+  rewrite -> H1. reflexivity. Qed.
 
 
 (** Now prove commutativity of multiplication.  (You will probably
@@ -1336,7 +1330,7 @@ Proof.
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
-  
+  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (** **** Exercise: 2 stars, optional (evenb_n__oddb_Sn) *)
