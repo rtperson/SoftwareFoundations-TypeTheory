@@ -1043,7 +1043,7 @@ Proof.
   intros n m. induction n as [| n'].
   Case "n = 0".
     simpl. rewrite -> plus_0_r. reflexivity.
-  Case "n = S n'".
+  Case "n = S n'". 
     simpl. rewrite -> IHn'. rewrite -> plus_n_Sm. reflexivity. Qed.
  
 (** [] *)
@@ -1188,8 +1188,22 @@ Proof.
 (** Translate your solution for [plus_comm] into an informal proof. *)
 
 (** Theorem: Addition is commutative.
+      that is, n + m = m + n
  
-    Proof: (* FILL IN HERE *)
+    Proof: 
+       First, suppose n = 0. 
+       Then we must prove that 0 + m = m + 0,
+          which follows directly from the definition of +.
+       Next, suppose n = S n'.
+       We must prove that S n' + m = m + S n'.
+       First, by the definition of plus, 
+         S n' + m = S (n' + m)
+       And, by plus_n_Sm, 
+         m + S n' = S (m + n')
+       Then, by the inductive hypothesis,
+         S (n' + m) = S (m + n')
+       Therefore, since S m = S n -> m = n,
+          n' + m = m + n', by the definition of S. QED.
 []
 *)
 
@@ -1208,7 +1222,11 @@ Proof.
 Theorem beq_nat_refl : forall n : nat,
   true = beq_nat n n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intro n. induction n as [| n'].
+  Case "n = 0".
+    simpl. reflexivity.
+  Case "n = S n'".
+    simpl. rewrite <- IHn'. reflexivity. Qed.
 (** [] *)
 
 
@@ -1295,7 +1313,19 @@ Proof.
 Theorem plus_swap : forall n m p : nat, 
   n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m p.
+  assert (H1: n + (m + p) = (n + m) + p).
+    Case "Proof of assertion".
+    rewrite -> plus_assoc. reflexivity.
+  rewrite -> H1.
+  assert (H2: m + (n + p) = m + n + p).
+    Case "Proof of assertion H2".
+    rewrite -> plus_assoc. reflexivity.
+  rewrite -> H2.
+  assert (H3: m + n = n + m).
+    Case "Proof of assertion H3".
+    rewrite -> plus_comm. reflexivity.
+  rewrite -> H3. reflexivity. Qed.
 
 
 (** Now prove commutativity of multiplication.  (You will probably
@@ -1306,7 +1336,7 @@ Proof.
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  
 (** [] *)
 
 (** **** Exercise: 2 stars, optional (evenb_n__oddb_Sn) *)
