@@ -1035,10 +1035,7 @@ Proof.
   Case "n = 0".
     simpl. reflexivity.
   Case "n = S n'".
-    induction m as [| m'].
-    SCase "m = 0". simpl. rewrite -> IHn'. reflexivity.
-    SCase "m = S m'".
-      simpl. rewrite -> IHn'. reflexivity. Qed.
+    simpl. rewrite <- IHn'. reflexivity. Qed.
 
 Theorem plus_comm : forall n m : nat,
   n + m = m + n.
